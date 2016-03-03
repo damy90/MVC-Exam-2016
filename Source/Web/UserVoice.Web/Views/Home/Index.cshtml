@@ -1,0 +1,37 @@
+﻿@model UserVoice.Web.ViewModels.Ideas.IdeaViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1>UserVoice suggestions system</h1>
+<h2>I suggest you ...</h2>
+<div class="row">
+    @using (Html.BeginForm("Post", "IdeasPublic", FormMethod.Post))
+    {
+        @Html.Partial("EditorTemplates/IdeaViewModel")
+        ;
+        <button type="submit">Post Idea</button>
+    }
+</div>
+
+@using (Ajax.BeginForm("Search", "IdeasPublic", null,
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "results",
+                                InsertionMode = InsertionMode.Replace,
+                                HttpMethod = "POST"
+                            }, new { id = "searchForm" }))
+{
+    <input type="text" name="query" oninput="changed()" />
+    <input type="submit" />
+}
+<script>
+    function changed() {
+        $("#searchForm").submit();
+    }
+</script>
+
+<div id="results">
+    @Html.Partial("_IdeasList")
+    @Html.Action("Index", "IdeasPublic")
+</div>

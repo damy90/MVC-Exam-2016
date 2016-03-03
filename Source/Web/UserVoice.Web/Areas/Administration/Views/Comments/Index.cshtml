@@ -1,0 +1,26 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().Grid<UserVoice.Web.ViewModels.Comments.CommentViewModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.Content);
+          columns.Bound(c => c.AuthorEmail);
+          columns.Bound(c => c.CreatedOn);
+          columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.PopUp))
+      .Pageable()
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.Id))
+          .Read(read => read.Action("Comments_Read", "Comments"))
+          .Update(update => update.Action("Comments_Update", "Comments"))
+          .Destroy(destroy => destroy.Action("Comments_Destroy", "Comments"))
+      )
+)

@@ -1,0 +1,47 @@
+﻿@using Kendo.Mvc.UI
+@model IEnumerable<UserVoice.Web.ViewModels.Ideas.IdeaViewModel>
+
+<script type="text/x-kendo-tmpl" id="template">
+    <div class="row">
+        <div class="col-md-1">
+            <b>#:Votes#</b>
+            votes
+        </div>
+        <div class="col-md-10">
+            <h3>#:Title#</h3>
+            <p>#:Description#</p>
+        </div>
+    </div>
+</script>
+
+<div class="demo-section k-content wide">
+    @(Html.Kendo().ListView<UserVoice.Web.ViewModels.Ideas.IdeaViewModel>(Model).Name("listView").TagName("div").ClientTemplateId("template")
+        .DataSource(dataSource =>
+        {
+            dataSource.ServerOperation(false);
+            dataSource.Model(model => model.Id(i => i.Id));
+            dataSource.Read(read => read.Action("Ideas_Read", "Ideas"));
+            dataSource.PageSize(3);
+            dataSource.Filter(filters =>
+            {
+                //filters.Add(i => i.Title).Contains("x");
+            });
+        }).Pageable()
+    )
+</div>
+
+<style>
+    #listView {
+        padding: 10px 5px;
+        margin-bottom: -1px;
+        min-height: 310px;
+    }
+
+    .k-listview:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+</style>
